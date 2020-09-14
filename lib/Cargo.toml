@@ -4,10 +4,14 @@ version = "0.0.0"
 authors = ["Esteban Borai <estebanborai@gmail.com>"]
 edition = "2018"
 license = "MIT"
-description = "Zero with no-break space utils"
+description = "Zero width character utilities"
 readme = "../README.md"
 repository = "https://github.com/EstebanBorai/zwnbsp"
-categories = []
+categories = [
+  "algorithms",
+  "encoding",
+  "parsing",
+]
 
 [lib]
 name = "zwnbsp"
