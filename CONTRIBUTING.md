@@ -7,10 +7,9 @@
 ## [Code of Conduct](./CODE_OF_CONDUCT.md)
 
 The zwnbsp project has a [Code of Conduct](./CODE_OF_CONDUCT.md). All
-individuals participating in the zwnbsp.github.io repo and the
-zwnbsp organization will be expected to abide by the Code of Conduct.
+individuals participating in the zwnbsp repo will be expected to abide by the Code of Conduct.
 Violating the Code of Conduct will result in action ranging from a conversation
-about behavior to being permanently banned from the zwnbsp organization.
+about behavior to being permanently banned from the zwnbsp repository.
 
 ### The Spirit of the law
 
