@@ -10,6 +10,9 @@
 
   [![Crates.io](https://img.shields.io/crates/v/zwnbsp.svg)](https://crates.io/crates/zwnbsp)
   [![Documentation](https://docs.rs/zwnbsp/badge.svg)](https://docs.rs/zwnbsp)
+  ![Build](https://github.com/EstebanBorai/zwnbsp/workflows/build/badge.svg)
+  ![Lint](https://github.com/EstebanBorai/zwnbsp/workflows/clippy/fmt/badge.svg)
+  ![Tests](https://github.com/EstebanBorai/zwnbsp/workflows/tests/badge.svg)
 
 </div>
 
