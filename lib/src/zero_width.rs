@@ -1,14 +1,34 @@
-use crate::{Binary, Error, ZeroWidthChar};
+use crate::{Binary, BinaryUnit, Error, ZeroWidthChar};
 use std::str::FromStr;
 
+/// Character replacement configuration represented by binary
+/// values `0`, `1` and ` ` (space).
+///
+/// Default values for each binary representation are:
+///
+/// `0`: `ZeroWidthChar::Space`
+/// `1`: `ZeroWidthChar::NonJoiner`
+/// `[Space]`: `ZeroWidthChar::Joiner`
+///
+pub type Config = [ZeroWidthChar; 3];
+
+/// Zero width characters builder
 pub struct ZeroWidth {
     binary: Binary,
+    config: Config,
 }
 
 impl From<Binary> for ZeroWidth {
     fn from(binary: Binary) -> Self {
+        let config: [ZeroWidthChar; 3] = [
+            ZeroWidthChar::Space,
+            ZeroWidthChar::NonJoiner,
+            ZeroWidthChar::Joiner,
+        ];
+
         Self {
-            binary
+            binary,
+            config,
         }
     }
 }
@@ -27,6 +47,28 @@ impl ZeroWidth {
         self.binary.to_string()
     }
 
+    /// Get the `ZeroWidthChar` equivalent to the provided `BinaryUnit`
+    pub fn get_from_binary(&self, unit: BinaryUnit) -> ZeroWidthChar {
+        match unit {
+            BinaryUnit::Zero => self.config.get(0).unwrap().clone(),
+            BinaryUnit::One => self.config.get(1).unwrap().clone(),
+            BinaryUnit::Space => self.config.get(2).unwrap().clone(),
+        }
+    }
+
+    /// Get the `ZeroWidthChar` **Unicode** equivalent to the provided `BinaryUnit`
+    pub fn get_unicode_from_binary(&self, unit: BinaryUnit) -> char {
+        self.get_from_binary(unit).as_unicode()
+    }
+
+    /// Get the `ZeroWidthChar` **HTML** equivalent to the provided `BinaryUnit`
+    pub fn get_html_from_binary(&self, unit: BinaryUnit) -> String {
+        let html = &self.get_from_binary(unit);
+        let html = html.as_html();
+        
+        html.to_string()
+    }
+
     /// Creates the Unicode zero width character representation
     /// from the binary representation of the ASCII value
     pub fn to_unicode(&self) -> String {
@@ -39,13 +81,13 @@ impl ZeroWidth {
         chars.into_iter().for_each(|character| {
             character.split("").for_each(|ch| {
                 if ch.eq("0") {
-                    zero_width.push(ZeroWidthChar::Space.as_unicode());
+                    zero_width.push(self.get_unicode_from_binary(BinaryUnit::Zero));
                 } else {
-                    zero_width.push(ZeroWidthChar::NonJoiner.as_unicode());
+                    zero_width.push(self.get_unicode_from_binary(BinaryUnit::One));
                 }
             });
 
-            zero_width.push(ZeroWidthChar::Joiner.as_unicode());
+            zero_width.push(self.get_unicode_from_binary(BinaryUnit::Space));
         });
 
         // remove trailing zero width character
@@ -66,13 +108,13 @@ impl ZeroWidth {
         chars.into_iter().for_each(|character| {
             character.split("").for_each(|ch| {
                 if ch.eq("0") {
-                    zero_width.push_str(ZeroWidthChar::Space.as_html());
+                    zero_width.push_str(&self.get_html_from_binary(BinaryUnit::Zero));
                 } else {
-                    zero_width.push_str(ZeroWidthChar::NonJoiner.as_html());
+                    zero_width.push_str(&self.get_html_from_binary(BinaryUnit::One));
                 }
             });
 
-            zero_width.push_str(ZeroWidthChar::Joiner.as_html());
+            zero_width.push_str(&self.get_html_from_binary(BinaryUnit::Space));
         });
 
         // remove trailing zero width character
