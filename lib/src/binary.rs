@@ -5,6 +5,13 @@ use std::string::ToString;
 /// Binary Representation of a `String` value
 pub struct Binary(String);
 
+/// The representation of each binary `char` (`0`, `1` or ` ` (space))
+pub enum BinaryUnit {
+    Zero,
+    One,
+    Space,
+}
+
 impl Binary {
     /// Decodes a `Binary` back to the _ASCII_ representation
     pub fn decode(&self) -> Result<String, Error> {
