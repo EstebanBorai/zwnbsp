@@ -3,7 +3,7 @@
     <img src="https://raw.githubusercontent.com/EstebanBorai/zwnbsp/main/assets/icon.png" height="120" width="120" />
   </div>
   <h1 align="center">zwnbsp</h1>
-  <h4 align="center">Zero width character utilities</h4>
+  <h4 align="center">Zero width no-breaking space character utilities for Unicode and HTML</h4>
 </div>
 
 <div align="center">
@@ -12,12 +12,6 @@
   [![Documentation](https://docs.rs/zwnbsp/badge.svg)](https://docs.rs/zwnbsp)
 
 </div>
-
-## Installation
-
-```toml
-zwnbsp = "0.0.1"
-```
 
 ## Usage
 
