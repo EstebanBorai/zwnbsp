@@ -131,3 +131,25 @@ impl ZeroWidth {
         zero_width
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn it_sets_custom_config() {
+      let conf: [ZeroWidthChar; 3]= [
+        ZeroWidthChar::NonJoiner,
+        ZeroWidthChar::Joiner,
+        ZeroWidthChar::NoBreakSpace,
+      ];
+
+      let mut zw = ZeroWidth::new("Rustaceans").unwrap();
+
+      zw.set_config(&conf);
+
+      assert_eq!(zw.config.get(0).unwrap(), conf.get(0).unwrap());
+      assert_eq!(zw.config.get(1).unwrap(), conf.get(1).unwrap());
+      assert_eq!(zw.config.get(2).unwrap(), conf.get(2).unwrap());
+    }
+}
