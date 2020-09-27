@@ -1,98 +1,5 @@
-use crate::{Binary, Error};
+use crate::{Binary, Error, ZeroWidthChar};
 use std::str::FromStr;
-
-/// # Zero-width space (ZWSP)
-///
-/// `char` for the Unicode representation on the ZWSP character
-///
-/// ## Representations
-///
-/// Encoding | Code
-/// --- | ---
-/// Unicode | `U+200B`
-/// HTML | `&#8203;` `&ZeroWidthSpace;`
-/// TeX | `\hskip0pt`
-/// LaTex | `\hspace{0pt}`
-/// groff | `\:`
-///
-/// ## Prohibited in URLs
-///
-/// ICANN rules prohibit domain names from including non-displayed characters
-/// such as zero-width space, and most browsers prohibit their use within domain
-/// names, because they can be used to create a homograph attack, where a malicious
-/// URL is visually indistinguishable from a legitimate one.
-///
-/// ## Reference
-///
-/// [Wikipedia](https://en.wikipedia.org/wiki/Zero-width_space)
-///
-pub const ZERO_WIDTH_SPACE: (char, &str) = ('\u{200B}', "&#8203;");
-
-/// # Zero-width non-joiner (ZWNJ)
-///
-/// `char` for the Unicode representation on the ZWNJ character
-///
-/// ## Representations
-///
-/// Encoding | Code
-/// --- | ---
-/// Unicode | `U+200C`
-/// HTML | `&#8204;` `&zwnj;`
-///
-/// ## Reference
-///
-/// [Wikipedia](https://en.wikipedia.org/wiki/Zero-width_non-joiner)
-///
-pub const ZERO_WIDTH_NON_JOINER: (char, &str) = ('\u{200C}', "&#8204;");
-
-/// # Zero-width joiner (ZWJ)
-///
-/// `char` for the Unicode representation on the ZWJ character
-///
-/// ## Representations
-///
-/// Encoding | Code
-/// --- | ---
-/// Unicode | `U+200D`
-/// HTML | `&#8205;` `&zwj;`
-///
-/// ## Reference
-///
-/// [Wikipedia](https://en.wikipedia.org/wiki/Zero-width_joiner)
-///
-pub const ZERO_WIDTH_JOINER: (char, &str) = ('\u{200D}', "&#8205;");
-
-/// # Word joiner (WJ)
-///
-/// ## Representations
-///
-/// Encoding | Code
-/// --- | ---
-/// Unicode | `U+2060`
-/// HTML | `&#8288;` `&NoBreak;`
-///
-/// ## Reference
-///
-/// [Wikipedia](https://en.wikipedia.org/wiki/Word_joiner)
-///
-pub const WORD_JOINER: (char, &str) = ('\u{2060}', "&#8288;");
-
-/// # Zero-width No-Break Space (ZWNBSP)
-///
-/// `char` for the Unicode representation on the ZWNBSP character
-///
-/// ## Representations
-///
-/// Encoding | Code
-/// --- | ---
-/// Unicode | `U+FEFF`
-/// HTML | `&#65279;`
-///
-/// ## Reference
-///
-/// [Wikipedia](https://www.fileformat.info/info/unicode/char/feff/index.htm)
-///
-pub const ZERO_WIDTH_NO_BREAK_SPACE: (char, &str) = ('\u{FEFF}', "&#65279;");
 
 pub struct ZeroWidth {
     binary: Binary,
@@ -132,13 +39,13 @@ impl ZeroWidth {
         chars.into_iter().for_each(|character| {
             character.split("").for_each(|ch| {
                 if ch.eq("0") {
-                    zero_width.push(ZERO_WIDTH_SPACE.0);
+                    zero_width.push(ZeroWidthChar::Space.as_unicode());
                 } else {
-                    zero_width.push(ZERO_WIDTH_NON_JOINER.0);
+                    zero_width.push(ZeroWidthChar::NonJoiner.as_unicode());
                 }
             });
 
-            zero_width.push(ZERO_WIDTH_JOINER.0);
+            zero_width.push(ZeroWidthChar::Joiner.as_unicode());
         });
 
         // remove trailing zero width character
@@ -159,13 +66,13 @@ impl ZeroWidth {
         chars.into_iter().for_each(|character| {
             character.split("").for_each(|ch| {
                 if ch.eq("0") {
-                    zero_width.push_str(ZERO_WIDTH_SPACE.1);
+                    zero_width.push_str(ZeroWidthChar::Space.as_html());
                 } else {
-                    zero_width.push_str(ZERO_WIDTH_NON_JOINER.1);
+                    zero_width.push_str(ZeroWidthChar::NonJoiner.as_html());
                 }
             });
 
-            zero_width.push_str(ZERO_WIDTH_JOINER.1);
+            zero_width.push_str(ZeroWidthChar::Joiner.as_html());
         });
 
         // remove trailing zero width character

@@ -30,9 +30,11 @@
 //!```
 //!
 mod binary;
+mod zero_width_char;
 mod error;
 mod zero_width;
 
 pub use binary::*;
+pub use zero_width_char::*;
 pub use error::*;
 pub use zero_width::*;
