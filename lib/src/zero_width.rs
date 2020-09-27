@@ -10,12 +10,12 @@ use std::str::FromStr;
 /// `1`: `ZeroWidthChar::NonJoiner`
 /// `[Space]`: `ZeroWidthChar::Joiner`
 ///
-pub type Config = [ZeroWidthChar; 3];
+pub type ReplacementConfig = [ZeroWidthChar; 3];
 
 /// Zero width characters builder
 pub struct ZeroWidth {
     binary: Binary,
-    config: Config,
+    config: ReplacementConfig,
 }
 
 impl From<Binary> for ZeroWidth {
@@ -36,6 +36,17 @@ impl ZeroWidth {
         let binary = Binary::from_str(string)?;
 
         Ok(ZeroWidth::from(binary))
+    }
+
+    /// Set the replacement characters configuration.
+    ///
+    /// Its important to note that theres no validation on the provided
+    /// characters due to provide maximum flexibility.
+    ///
+    /// The values provided to this method are settled _as is_ for the
+    /// `ZeroWidth` instance in question.
+    pub fn set_config(&mut self, config: &ReplacementConfig) {
+        self.config = config.clone();
     }
 
     /// Retrieve the binary representation of the ASCII
