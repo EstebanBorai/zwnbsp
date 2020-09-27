@@ -26,10 +26,7 @@ impl From<Binary> for ZeroWidth {
             ZeroWidthChar::Joiner,
         ];
 
-        Self {
-            binary,
-            config,
-        }
+        Self { binary, config }
     }
 }
 
@@ -50,9 +47,9 @@ impl ZeroWidth {
     /// Get the `ZeroWidthChar` equivalent to the provided `BinaryUnit`
     pub fn get_from_binary(&self, unit: BinaryUnit) -> ZeroWidthChar {
         match unit {
-            BinaryUnit::Zero => self.config.get(0).unwrap().clone(),
-            BinaryUnit::One => self.config.get(1).unwrap().clone(),
-            BinaryUnit::Space => self.config.get(2).unwrap().clone(),
+            BinaryUnit::Zero => *self.config.get(0).unwrap(),
+            BinaryUnit::One => *self.config.get(1).unwrap(),
+            BinaryUnit::Space => *self.config.get(2).unwrap(),
         }
     }
 
@@ -65,7 +62,7 @@ impl ZeroWidth {
     pub fn get_html_from_binary(&self, unit: BinaryUnit) -> String {
         let html = &self.get_from_binary(unit);
         let html = html.as_html();
-        
+
         html.to_string()
     }
 
