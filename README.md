@@ -81,7 +81,7 @@ same as used by this crate.
 The following flowchart explains the conversion from ASCII to ZWNBSP and from ZWNBSP back to ASCII.
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/EstebanBorai/zwnbsp/main/assets/how-it-works.png" />
+  <img src="https://raw.githubusercontent.com/EstebanBorai/zwnbsp/main/assets/how-it-works.png" width="400" />
 </div>
 
 ### Checking the values in Unicode
