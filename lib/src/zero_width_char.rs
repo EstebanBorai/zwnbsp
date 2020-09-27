@@ -4,6 +4,7 @@ pub const ZERO_WIDTH_JOINER: (char, &str) = ('\u{200D}', "&#8205;");
 pub const WORD_JOINER: (char, &str) = ('\u{2060}', "&#8288;");
 pub const ZERO_WIDTH_NO_BREAK_SPACE: (char, &str) = ('\u{FEFF}', "&#65279;");
 
+#[derive(Debug, Copy, Clone)]
 pub enum ZeroWidthChar {
     /// # Zero-width Space (ZWSP)
     ///

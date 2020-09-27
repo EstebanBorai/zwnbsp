@@ -5,7 +5,7 @@ use std::string::ToString;
 /// Binary Representation of a `String` value
 pub struct Binary(String);
 
-/// The representation of each binary `char` (`0`, `1` or ` ` (space))
+/// The representation of each binary `char` (`0`, `1` or `[Space]`)
 pub enum BinaryUnit {
     Zero,
     One,
