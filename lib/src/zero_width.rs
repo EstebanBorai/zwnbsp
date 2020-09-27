@@ -94,11 +94,15 @@ pub const WORD_JOINER: (char, &str) = ('\u{2060}', "&#8288;");
 ///
 pub const ZERO_WIDTH_NO_BREAK_SPACE: (char, &str) = ('\u{FEFF}', "&#65279;");
 
-pub struct ZeroWidth(Binary);
+pub struct ZeroWidth {
+    binary: Binary,
+}
 
 impl From<Binary> for ZeroWidth {
     fn from(binary: Binary) -> Self {
-        Self(binary)
+        Self {
+            binary
+        }
     }
 }
 
@@ -113,7 +117,7 @@ impl ZeroWidth {
     /// Retrieve the binary representation of the ASCII
     /// value provided
     pub fn get_binary_string(&self) -> String {
-        self.0.to_string()
+        self.binary.to_string()
     }
 
     /// Creates the Unicode zero width character representation
