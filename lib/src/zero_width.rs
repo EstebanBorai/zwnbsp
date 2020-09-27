@@ -93,7 +93,7 @@ impl ZeroWidth {
         zero_width
     }
 
-    /// Creates the Unicode zero width character representation
+    /// Creates the HTML zero width character representation
     /// from the binary representation of the ASCII value
     pub fn to_html(&self) -> String {
         let string_value = self.get_binary_string();
