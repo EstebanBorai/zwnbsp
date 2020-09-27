@@ -59,21 +59,4 @@ mod test {
 
         assert_eq!(binary, Binary::from_str(ascii).unwrap().0);
     }
-
-    #[test]
-    fn get_the_string_representation() {
-        let binary_raw = "01010010 01110101 01110011 01110100 01100001 01100011 01100101 01100001 01101110 01110011";
-        let binary_string = Binary::from_str("Rustaceans").unwrap();
-
-        assert_eq!(binary_raw, binary_string.to_string());
-    }
-
-    #[test]
-    fn converts_to_ascii() {
-        let original = "Rustaceans";
-        let decoded = Binary::from_str(original).unwrap();
-        let decoded = decoded.decode().unwrap();
-
-        assert_eq!(original.to_string(), decoded);
-    }
 }
