@@ -1,4 +1,4 @@
-use crate::{Binary, BinaryUnit, Error, ZeroWidthChar};
+use crate::{Binary, BinaryUnit, Error, Input, NotSupportedText, ZeroWidthChar};
 use std::str::FromStr;
 
 /// Character replacement configuration represented by binary
@@ -14,7 +14,14 @@ pub type ReplacementConfig = [ZeroWidthChar; 3];
 
 /// Zero width characters builder
 pub struct ZeroWidth {
+    /// The `Binary` representation of the raw text
     binary: Binary,
+    /// The elements to replace `BinaryUnits` with.
+    ///
+    /// The first element (`0`) represents the `BinaryUnit::Zero`,
+    /// the second element represents the `BinaryUnit::One` and finally
+    /// the third element represent the `BinaryUnit::Space` used as a "padding"
+    /// for binary sets
     config: ReplacementConfig,
 }
 
@@ -129,6 +136,44 @@ impl ZeroWidth {
         zero_width.pop();
 
         zero_width
+    }
+
+    pub fn decode(&self, raw: &str) -> Result<String, NotSupportedText> {
+        let raw_type = Input::from_str(raw)?;
+        
+        match raw_type {
+            Input::HTML => Ok(self.from_html(raw)),
+            Input::Unicode => Ok(self.from_unicode(raw)),
+        }
+    }
+
+    pub fn from_html(&self, raw: &str) -> String {
+        let encoded_binaries = self.get_binary_sets(
+            raw,
+            self.get_separator(Input::HTML).as_str()
+        );
+
+        encoded_binaries.into_iter().for_each(|binary_set| {
+            binary_set
+        });
+    }
+
+    pub fn from_unicode(&self, raw: &str) -> String {
+        todo!()
+    }
+
+    fn get_binary_sets<'a>(&self, raw: &'a str, separator: &str) -> Vec<String> {
+        raw.split(separator)
+            .map(|set| set.to_string())
+            .collect::<Vec<String>>()
+    }
+
+    fn get_separator(&self, raw_type: Input) -> String {
+        let separator = self.config[2];
+        return match raw_type {
+            Input::HTML => separator.as_html().to_string(),
+            Input::Unicode => separator.as_unicode().to_string(),
+        };
     }
 }
 
