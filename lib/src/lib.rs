@@ -31,13 +31,13 @@
 //!
 mod binary;
 mod error;
-mod output;
+mod input;
 mod zero_width;
 mod zero_width_char;
 
 pub use binary::*;
 pub use error::*;
-pub use output::*;
+pub use input::*;
 pub use zero_width::*;
 pub use zero_width_char::*;
 
