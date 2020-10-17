@@ -1,3 +1,4 @@
+use crate::NotSupportedText;
 use std::num::ParseIntError;
 use std::string::FromUtf8Error;
 
@@ -20,5 +21,11 @@ impl From<FromUtf8Error> for Error {
 impl From<ParseIntError> for Error {
     fn from(parse_int_error: ParseIntError) -> Self {
         Self::ParseBinary(parse_int_error.to_string())
+    }
+}
+
+impl From<NotSupportedText> for Error {
+    fn from(_: NotSupportedText) -> Self {
+        Self::ParseBinary(String::from("Provided Text is not Supported"))
     }
 }

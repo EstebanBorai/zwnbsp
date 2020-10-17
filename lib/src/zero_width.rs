@@ -1,5 +1,5 @@
 use crate::{Binary, BinaryUnit, Error, Input, NotSupportedText, ZeroWidthChar};
-use std::str::FromStr;
+use std::str::{FromStr, from_utf8};
 
 /// Character replacement configuration represented by binary
 /// values `0`, `1` and ` ` (space).
@@ -138,24 +138,40 @@ impl ZeroWidth {
         zero_width
     }
 
-    pub fn decode(&self, raw: &str) -> Result<String, NotSupportedText> {
+    pub fn decode(&self, raw: &str) -> Result<String, Error> {
         let raw_type = Input::from_str(raw)?;
         
         match raw_type {
-            Input::HTML => Ok(self.from_html(raw)),
+            Input::HTML => {
+                let zwnbsp = self.from_html(raw)?;
+
+                zwnbsp.binary.decode()
+            },
             Input::Unicode => Ok(self.from_unicode(raw)),
         }
     }
 
-    pub fn from_html(&self, raw: &str) -> String {
-        let encoded_binaries = self.get_binary_sets(
+    pub fn from_html(&self, raw: &str) -> Result<Self, Error> {
+        let binary_string = self.get_binary_sets(
             raw,
             self.get_separator(Input::HTML).as_str()
-        );
+        ).into_iter().map(|binary_set| {
+            binary_set.as_bytes()
+                .chunks(7)
+                .map(|chunk| {
+                    let single_binary = from_utf8(chunk).unwrap();
 
-        encoded_binaries.into_iter().for_each(|binary_set| {
-            binary_set
-        });
+                    if single_binary == self.config.get(0).unwrap().as_html() {
+                        return "0";
+                    }
+
+                    "1"
+                })
+                .collect::<Vec<&str>>()
+                .join("")
+        }).collect::<Vec<String>>().join(" ");
+
+        Self::new(&binary_string)
     }
 
     pub fn from_unicode(&self, raw: &str) -> String {
@@ -181,6 +197,8 @@ impl ZeroWidth {
 mod test {
     use super::*;
 
+    const RUSTACEANS_ZW_HTML: &str = "&#8204;&#8203;&#8204;&#8203;&#8204;&#8203;&#8203;&#8204;&#8203;&#8204;&#8205;&#8204;&#8203;&#8204;&#8204;&#8204;&#8203;&#8204;&#8203;&#8204;&#8204;&#8205;&#8204;&#8203;&#8204;&#8204;&#8204;&#8203;&#8203;&#8204;&#8204;&#8204;&#8205;&#8204;&#8203;&#8204;&#8204;&#8204;&#8203;&#8204;&#8203;&#8203;&#8204;&#8205;&#8204;&#8203;&#8204;&#8204;&#8203;&#8203;&#8203;&#8203;&#8204;&#8204;&#8205;&#8204;&#8203;&#8204;&#8204;&#8203;&#8203;&#8203;&#8204;&#8204;&#8204;&#8205;&#8204;&#8203;&#8204;&#8204;&#8203;&#8203;&#8204;&#8203;&#8204;&#8204;&#8205;&#8204;&#8203;&#8204;&#8204;&#8203;&#8203;&#8203;&#8203;&#8204;&#8204;&#8205;&#8204;&#8203;&#8204;&#8204;&#8203;&#8204;&#8204;&#8204;&#8203;&#8204;&#8205;&#8204;&#8203;&#8204;&#8204;&#8204;&#8203;&#8203;&#8204;&#8204;&#8204;&#8205";
+
     #[test]
     fn it_sets_custom_config() {
       let conf: [ZeroWidthChar; 3]= [
@@ -197,4 +215,12 @@ mod test {
       assert_eq!(zw.config.get(1).unwrap(), conf.get(1).unwrap());
       assert_eq!(zw.config.get(2).unwrap(), conf.get(2).unwrap());
     }
+
+    #[test]
+    fn it_decodes_html_to_ascii() {
+      let zw = ZeroWidth::new("Rustaceans").unwrap();
+
+      assert_eq!(zw.decode(RUSTACEANS_ZW_HTML).unwrap(), "Rustaceans");
+    }
 }
+
