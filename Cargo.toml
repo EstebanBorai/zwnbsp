@@ -1,4 +1,14 @@
-[workspace]
-members = [
-  "lib",
+[package]
+name = "zwnbsp"
+version = "0.0.2"
+authors = ["Esteban Borai <estebanborai@gmail.com>"]
+edition = "2021"
+license = "MIT"
+description = "Zero width no-breaking space character utilities for Unicode and HTML"
+readme = "README.md"
+repository = "https://github.com/EstebanBorai/zwnbsp"
+categories = [
+  "algorithms",
+  "encoding",
+  "parsing",
 ]

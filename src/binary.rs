@@ -1,6 +1,7 @@
-use crate::error::Error;
+use std::fmt::Display;
 use std::str::FromStr;
-use std::string::ToString;
+
+use crate::error::Error;
 
 /// Binary Representation of a `String` value
 pub struct Binary(String);
@@ -17,9 +18,9 @@ impl Binary {
     }
 }
 
-impl ToString for Binary {
-    fn to_string(&self) -> String {
-        self.0.clone()
+impl Display for Binary {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
     }
 }
 
