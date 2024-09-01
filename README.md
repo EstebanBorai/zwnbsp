@@ -16,7 +16,7 @@
 ## Installation
 
 ```toml
-zwnbsp = "0.0.1"
+cargo add zwnbsp
 ```
 
 ## Usage
